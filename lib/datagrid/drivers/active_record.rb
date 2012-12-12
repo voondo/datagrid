@@ -4,15 +4,15 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::ActiveRecord::Base)
         else
-          scope.is_a?(::ActiveRecord::Relation) 
+          scope.is_a?(::ActiveRecord::Relation)
         end
       end
 
       def to_scope(scope)
-        scope.scoped({})
+        scope.scoped()
       end
 
       def where(scope, condition)

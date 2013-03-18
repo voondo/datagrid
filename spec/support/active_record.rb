@@ -14,6 +14,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.integer :group_id
     t.string :name
     t.string :category
+    t.string :access_level
+    t.string :pet
     t.boolean :disabled, :null => false, :default => false
     t.boolean :confirmed, :null => false, :default => false
     t.date :shipping_date
@@ -30,5 +32,6 @@ ActiveRecord::Schema.define(:version => 1) do
     belongs_to :group
   end
   class ::Group < ActiveRecord::Base
+    has_many :entries
   end
 end

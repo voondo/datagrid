@@ -12,15 +12,24 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
+
       value = if column.html?
-        if column.block.arity > 1
-          @template.instance_exec(asset, grid, &column.block)
-        else
-          @template.instance_exec(asset, &column.block)
+        args = []
+        remaining_arity = column.html_block.arity
+
+        if column.data?
+          args << column.value(asset,grid)
+          remaining_arity -= 1
         end
+
+        args << asset if remaining_arity > 0
+        args << grid if remaining_arity > 1
+
+        @template.instance_exec(*args, &column.html_block)
       else
-        column.value(asset, grid)
+        column.value(asset,grid)
       end
+
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         @template.link_to(value, url)
@@ -63,17 +72,7 @@ module Datagrid
     end
 
     def order_for(grid, column)
-      @template.content_tag(:div, :class => "order") do
-        @template.link_to(
-          I18n.t("datagrid.table.order.asc", :default => "&uarr;".html_safe),
-          @template.url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => false)),
-          :class => "order asc"
-        ) + " " + @template.link_to(
-          I18n.t("datagrid.table.order.desc", :default => "&darr;".html_safe),
-          @template.url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => true )),
-          :class => "order desc"
-        )
-      end
+      @template.render :partial => "datagrid/order_for", :locals => { :grid => grid, :column => column }
     end
 
 

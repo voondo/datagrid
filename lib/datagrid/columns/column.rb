@@ -1,6 +1,6 @@
 class Datagrid::Columns::Column
 
-  attr_accessor :grid, :options, :block, :name, :html_block
+  attr_accessor :grid, :options, :block, :name, :html_block, :group
 
   def initialize(grid, name, options = {}, &block)
     self.grid = grid
@@ -13,6 +13,9 @@ class Datagrid::Columns::Column
         self.html_block = options[:html]
       end
       self.block = block
+    end
+    if options[:group]
+      self.group = options[:group]
     end
     if format
       ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")
@@ -42,7 +45,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] || 
+    self.options[:header] ||
       I18n.translate(self.name, :scope => "datagrid.#{self.grid.param_name}.columns", :default => self.name.to_s.humanize )
   end
 

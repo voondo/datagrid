@@ -84,8 +84,6 @@ Gem::Specification.new do |s|
     "spec/support/mongoid.rb",
     "spec/support/simple_report.rb",
     "spec/support/test_partials/_actions.html.erb",
-    "template/controller.rb.erb",
-    "template/grid.rb.erb",
     "templates/controller.rb.erb",
     "templates/grid.rb.erb",
     "templates/index.html.erb"

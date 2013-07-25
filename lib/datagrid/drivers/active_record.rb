@@ -57,6 +57,9 @@ module Datagrid
       rescue ::ActiveRecord::StatementInvalid
         false
       end
+      def reverse_order(scope)
+        scope.reverse_order
+      end
     end
   end
 end

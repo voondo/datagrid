@@ -12,8 +12,8 @@ class Datagrid::Filters::BaseFilter
     self.block = block || default_filter_block
   end
 
-  def format(value)
-    raise NotImplementedError, "#format(value) suppose to be overwritten"
+  def parse(value)
+    raise NotImplementedError, "#parse(value) suppose to be overwritten"
   end
 
   def apply(grid_object, scope, value)
@@ -31,13 +31,13 @@ class Datagrid::Filters::BaseFilter
     result
   end
 
-  def format_values(value)
+  def parse_values(value)
     if !self.multiple && value.is_a?(Array)
       raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option."
     end
     values = Array.wrap(value)
     values.map! do |v|
-      self.format(v)
+      self.parse(v)
     end
     self.multiple ? values : values.first
   end
@@ -86,6 +86,10 @@ class Datagrid::Filters::BaseFilter
     else
       default_filter_where(driver, scope, value)
     end
+  end
+
+  def format(value)
+    value.nil? ? nil : value.to_s
   end
 
   protected

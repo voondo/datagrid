@@ -272,10 +272,27 @@ describe Datagrid::Helper do
         grid = OrderedGrid.new(:descending => true, :order => :category)
         subject.datagrid_order_for(grid, grid.column_by_name(:category)).should equal_to_dom(<<-HTML)
 <div class="order">
-  <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">&uarr;</a>
-  <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">&darr;</a>
+  <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
+  <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
 </div>
         HTML
+      end
+    end
+    describe ".datagrid_form_for" do
+      it "should render ordering layout" do
+        class FormForGrid
+          include Datagrid
+          scope { Entry }
+          filter(:category)
+        end
+        grid = FormForGrid.new(:category => "hello")
+        subject.datagrid_form_for(grid, :url => "/grid").should match_css_pattern(
+          "form.datagrid-form.form_for_grid[action='/grid']" => 1,
+          "form input[name=utf8]" => 1,
+          "form .filter label" => "Category",
+          "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
+          "form input[name=commit][value=Search]" => 1
+        )
       end
     end
   end

@@ -158,55 +158,20 @@ create  app/views/skills/index.html.erb
 route  resources :skills
 ```
 
-### Manually
 
-If you want to be a true ninja you can build everything from scratch on your own.
+### Customize Built-in partials
 
-In order to create form for your report you can use all set of rails built-in tools.
-More over Datagrid provides you two additional form helpers:
+In order to get a control on datagrid built-in partials run:
 
-* datagrid\_label
-* datagrid\_filter
-
-
-The easiest way to create a report form (haml for readablity):
-
-``` haml
-# Method `GET` is recommended for all report forms by default.
-- form_for @report, :html => {:method => :get} do |f|
-  - @report.filters.each do |filter|
-    %div
-      = f.datagrid_label filter
-      = f.datagrid_filter filter
-  = f.submit
+``` sh
+rake datagrid:copy_partials
 ```
 
-Your controller:
+### Advanced frontend
 
-``` ruby
-map.resources :simple_reports, :only => [:index]
+All advanced frontend things are described in:
 
-class SimpleReportsController < ApplicationController
-  def index
-    @report = SimpleReport.new(params[:simple_report])
-  end
-end
-```
-
-There is a simple helper set of helpers that allows you display report:
-(require any pagination gem, will\_paginate is used as an example)
-
-``` haml
-- assets = @report.assets.paginate(:page => params[:page])
-
-%div== Total #{assets.total_entries}
-= datagrid_table(@report, assets)
-= will_paginate assets
-```
-
-If you need a custom interface for your report you should probably build it yourself with datagrid helpers.
-
-[More about frontend](https://github.com/bogdan/datagrid/wiki/Frontend)
+[Frontend section on wiki](https://github.com/bogdan/datagrid/wiki/Frontend)
 
 ## Self-Promotion
 

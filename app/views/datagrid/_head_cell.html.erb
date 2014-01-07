@@ -1,0 +1,8 @@
+<%
+rowspan ||= 1
+colspan ||= 1
+%>
+<th colspan="<%= colspan %>" rowspan="<%= rowspan %>" class="<%= datagrid_column_classes(grid, column) %>">
+  <%= column.header %>
+  <%= datagrid_order_for(grid, column) if column.order && options[:order]%>
+</th>

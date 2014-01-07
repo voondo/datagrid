@@ -1,5 +1,7 @@
 class Datagrid::Columns::Column
 
+
+  attr_accessor :grid, :options, :block, :name, :html_block, :group
   class ResponseFormat # :nodoc:
 
     attr_accessor :data_block, :html_block
@@ -39,6 +41,9 @@ class Datagrid::Columns::Column
       if options[:html].is_a? Proc
         self.html_block = options[:html]
       end
+    end
+    if options[:group]
+      self.group = options[:group]
     end
   end
 

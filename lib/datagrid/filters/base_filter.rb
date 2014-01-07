@@ -26,9 +26,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
     result = execute(value, scope, grid_object)
     return scope unless result
-    unless grid_object.driver.match?(result)
-      raise Datagrid::FilteringError, "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
-    end
+
     result
   end
 

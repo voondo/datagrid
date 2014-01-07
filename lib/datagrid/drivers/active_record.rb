@@ -4,10 +4,10 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::ActiveRecord::Base)
         else
-          scope.is_a?(::ActiveRecord::Relation) 
+          scope.is_a?(::ActiveRecord::Relation)
         end
       end
 
@@ -64,6 +64,10 @@ module Datagrid
 
       def column_names(scope)
         scope.column_names
+      end
+
+      def reverse_order(scope)
+        scope.reverse_order
       end
 
       def is_timestamp?(scope, field)

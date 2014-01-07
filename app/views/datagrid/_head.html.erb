@@ -1,8 +1,31 @@
+<%
+columns = grid.columns(*options[:columns])
+columns_without_group, columns_with_group = columns.partition{|col| col.group.nil? }
+has_groups = !columns_with_group.empty?
+columns_by_group = columns_with_group.group_by(&:group)
+current_group = nil
+%>
 <tr>
-  <% grid.html_columns(*options[:columns]).each do |column| %>
-    <th class="<%= datagrid_column_classes(grid, column) %>">
-      <%= column.header %>
-      <%= datagrid_order_for(grid, column) if column.order && options[:order]%>
-    </th>
+  <% columns.each do |column| %>
+    <% if columns_without_group.include? column %>
+      <%= render 'datagrid/head_cell', grid: grid, column: column, rowspan: (has_groups ? 2 : 1), options: options %>
+    <% else %>
+      <% group = column.group %>
+      <% if current_group != group %>
+        <% current_group = group %>
+        <th class="group" colspan="<%= columns_by_group[group].count %>">
+          <%= group %>
+        </th>
+      <% end %>
+    <% end %>
   <% end %>
 </tr>
+<% if has_groups %>
+  <tr>
+    <% columns_by_group.each do |group, columns| %>
+      <% columns.each do |column| %>
+        <%= render 'datagrid/head_cell', grid: grid, column: column, options: options %>
+      <% end %>
+    <% end %>
+  </tr>
+<% end %>
